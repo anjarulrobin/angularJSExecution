@@ -47,24 +47,35 @@
         console.log("Controller1 loaded");
         console.log("rand in service controller1", myService.rand);
         console.log("rand in factory controller1", myFactory.rand);
-        
+        $scope.testFun1 = function(){
+            console.log("Printing inside method of controller1");
+        }
     });
 
     app.controller('controller2', function($scope, myService, myFactory){
         console.log("Controller2 loaded");
         console.log("rand in service controller2", myService.rand);
         console.log("rand in factory controller2", myFactory.rand);
+        $scope.testFun2 = function(){
+            console.log("Printing inside method of controller2");
+        }
     });
 
     app.service('myService', function(){
         console.log("My service is executed.");
         this.rand = Math.round(Math.random()*100);
+        this.testFun3 = function(){
+            console.log("Printing inside method of myService");
+        }
     });
 
     app.factory('myFactory', function(){
         console.log("My factory is executed.");
         var obj = {};
         obj.rand = Math.round(Math.random()*100);
+        this.testFun4 = function(){
+            console.log("Printing inside method of myFactory");
+        }
         return obj;
     });
 
