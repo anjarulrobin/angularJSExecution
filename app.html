@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events in angular</title>
+</head>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.min.js"></script>
+<script>
+
+    /* I want to know,
+            1. what happens when the route-view gets changed
+            2. what happens when more than one controller uses the same service
+            3. does the service executes multiple times or only once for each controller
+            4. if changes the service has a variable of dynamic values based on different controller
+            5. does the app initializes for each view
+    */
+    var app = angular.module('app', ["ngRoute"]);
+    
+    app.run(function(){
+        console.log("The app is running");
+    })
+
+    app.config( function($routeProvider){
+        console.log("Configuring the app");
+        $routeProvider
+            .when('/', {
+                controller: 'controller0'
+            })
+            .when('/view1', {
+                templateUrl: 'views/view1.html',
+                controller: 'controller1'
+            })
+            .when('/view2', {
+                templateUrl: 'views/view2.html',
+                controller: 'controller2'
+            })
+    });
+
+    app.controller('controller0', function(){
+        console.log("Controller 0 loaded");
+    })
+
+    app.controller('controller1', function($scope, myService, myFactory){
+        console.log("Controller1 loaded");
+        console.log("rand in service controller1", myService.rand);
+        console.log("rand in factory controller1", myFactory.rand);
+        
+    });
+
+    app.controller('controller2', function($scope, myService, myFactory){
+        console.log("Controller2 loaded");
+        console.log("rand in service controller2", myService.rand);
+        console.log("rand in factory controller2", myFactory.rand);
+    });
+
+    app.service('myService', function(){
+        console.log("My service is executed.");
+        this.rand = Math.round(Math.random()*100);
+    });
+
+    app.factory('myFactory', function(){
+        console.log("My factory is executed.");
+        var obj = {};
+        obj.rand = Math.round(Math.random()*100);
+        return obj;
+    });
+
+</script>
+
+<body ng-app="app">
+    <a href="#!/view1"> Go to view 1</a>
+    <a href="#!/view2"> Go to view 2</a>
+
+    <div ng-view></div>
+
+</body>
+</html>
